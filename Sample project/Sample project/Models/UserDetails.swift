@@ -17,7 +17,7 @@ struct UserDetails: Decodable {
     var company: CompanyInfo
 }
 
-struct AddressInfo: Decodable {
+public struct AddressInfo: Decodable {
     var street: String
     var suite: String
     var city: String
