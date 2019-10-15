@@ -14,11 +14,21 @@ import PureLayout
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var jsonService = JsonService()
-    
     var dataArray = [UserDetails]()
+    var user: UserDetails!
+    var viewModel: UserDetailsViewModel!
+//    var userViewController: UserViewController!
+    
     
     @IBOutlet weak var fetchButton: UIButton!
     @IBOutlet weak var userTableView: UITableView!
+    
+        func add() {
+    //        let userViewController = self.storyboard?.instantiateViewController(withIdentifier: "userViewController")
+            let userViewController = UserViewController()
+            userViewController.userDetailsViewModel = UserDetailsViewModel(userDetails: user)
+            present(userViewController, animated: true, completion: nil)
+        }
     
     
     @IBAction func buttonTapped(_ sender: Any) {
@@ -28,29 +38,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        buildViews()
     }
     
-    func populateTableView() {
-        jsonService.fetchData() { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let data):
-                    self.dataArray = data
-                }
-                self.userTableView.reloadData()
-                self.userTableView.isHidden = false
-            }
-        }
-    }
+
+    
     
     @objc func cellButtonTapped (_ sender: UIButton) {
-        let alert = UIAlertController(title: "Error", message: "Not implemented yet", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-            print("You've pressed cancel");
-        }
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
+        add()
     }
 }

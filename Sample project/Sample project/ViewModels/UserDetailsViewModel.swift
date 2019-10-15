@@ -10,21 +10,23 @@ import Foundation
 
 public class UserDetailsViewModel {
     
-    private let userDetails: UserDetails
-    private let addressInfo: AddressInfo
-    private let geoInfo: GeoInfo
-    private let companyInfo: CompanyInfo
+    public let userDetails: UserDetails
+    public let userName: String
+//    private let addressInfo: AddressInfo
+//    private let geoInfo: GeoInfo
+//    private let companyInfo: CompanyInfo
     
     
-    init(userDetails: UserDetails,
-         addressInfo: AddressInfo,
-         geoInfo: GeoInfo,
-         companyInfo: CompanyInfo)
+    init(userDetails: UserDetails)
+//         addressInfo: AddressInfo,
+//         geoInfo: GeoInfo,
+//         companyInfo: CompanyInfo)
     {
         self.userDetails = userDetails
-        self.addressInfo = addressInfo
-        self.geoInfo = geoInfo
-        self.companyInfo = companyInfo
+        userName = userDetails.name
+//        self.addressInfo = addressInfo
+//        self.geoInfo = geoInfo
+//        self.companyInfo = companyInfo
     }
     public var id: Int {
         return userDetails.id

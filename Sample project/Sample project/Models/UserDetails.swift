@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserDetails: Decodable {
+public struct UserDetails: Decodable {
     var id: Int
     var name: String
     var address: AddressInfo
