@@ -17,34 +17,72 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var dataArray = [UserDetails]()
     var user: UserDetails!
     var viewModel: UserDetailsViewModel!
-//    var userViewController: UserViewController!
-    
     
     @IBOutlet weak var fetchButton: UIButton!
     @IBOutlet weak var userTableView: UITableView!
     
-        func add() {
-    //        let userViewController = self.storyboard?.instantiateViewController(withIdentifier: "userViewController")
-            let userViewController = UserViewController()
-            userViewController.userDetailsViewModel = UserDetailsViewModel(userDetails: user)
-            present(userViewController, animated: true, completion: nil)
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.dataArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = userTableView.dequeueReusableCell(withIdentifier: "userCell") as! UserTable
+        let user = self.dataArray[indexPath.row]
+        self.user = user
+        viewModel = UserDetailsViewModel(userDetails: user)
+        
+        cell.titleLabel?.text = viewModel.name
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let indexPath = userTableView.indexPathForSelectedRow
+        let currentCell = userTableView.cellForRow(at: indexPath!) as! UserTable
+        let userViewController = UserViewController()
+        userTableView.deselectRow(at: indexPath!, animated: true)
+        present(userViewController, animated: true, completion: nil)
+        userViewController.nameLabel.text = currentCell.titleLabel.text
+        userViewController.phoneLabel?.text = viewModel.phone
+    }
+    
+    func setupTableView() {
+        userTableView.isHidden = true
+        userTableView.dataSource = self
+        userTableView.delegate = self
+        userTableView.register(UINib(nibName: "UserTable", bundle: nil), forCellReuseIdentifier: "userCell")
+    }
+    
+    func populateTableView() {
+        jsonService.fetchData() { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let data):
+                    self.dataArray = data
+                }
+                self.userTableView.reloadData()
+                self.userTableView.isHidden = false
+            }
         }
-    
-    
-    @IBAction func buttonTapped(_ sender: Any) {
-        populateTableView()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        buildViews()
     }
     
-
-    
-    
-    @objc func cellButtonTapped (_ sender: UIButton) {
-        add()
+    @IBAction func buttonTapped(_ sender: Any) {
+        populateTableView()
     }
 }

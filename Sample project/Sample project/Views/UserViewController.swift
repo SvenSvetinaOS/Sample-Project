@@ -11,14 +11,11 @@ import UIKit
 
 class UserViewController: UIViewController {
     
-    var userDetailsViewModel: UserDetailsViewModel!
-    
     @IBOutlet weak var nameLabel: UILabel!
-    
-    
+    @IBOutlet weak var phoneLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        nameLabel.text = userDetailsViewModel.name
+//        nameLabel.text = userDetailsViewModel.name
     }
 }

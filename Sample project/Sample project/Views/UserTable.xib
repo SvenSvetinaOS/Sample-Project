@@ -15,26 +15,16 @@
                 <rect key="frame" x="0.0" y="0.0" width="466" height="74"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esZ-6Z-bC4">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esZ-6Z-bC4">
                         <rect key="frame" x="15" y="15" width="436" height="44"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qOP-qK-CqF">
-                        <rect key="frame" x="0.0" y="0.0" width="466" height="76"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </button>
                 </subviews>
-                <constraints>
-                    <constraint firstAttribute="bottom" secondItem="esZ-6Z-bC4" secondAttribute="bottom" constant="15" id="PZa-zD-6t4"/>
-                    <constraint firstItem="esZ-6Z-bC4" firstAttribute="top" secondItem="aDV-wv-6A3" secondAttribute="top" constant="15" id="dkd-Nw-PtB"/>
-                    <constraint firstAttribute="trailing" secondItem="esZ-6Z-bC4" secondAttribute="trailing" constant="15" id="mjB-Yd-hXL"/>
-                    <constraint firstItem="esZ-6Z-bC4" firstAttribute="leading" secondItem="aDV-wv-6A3" secondAttribute="leading" constant="15" id="tuU-if-Jzz"/>
-                </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="cellButton" destination="qOP-qK-CqF" id="tCm-9F-j61"/>
                 <outlet property="titleLabel" destination="esZ-6Z-bC4" id="grW-L7-fVj"/>
             </connections>
             <point key="canvasLocation" x="-326.39999999999998" y="-17.991004497751124"/>

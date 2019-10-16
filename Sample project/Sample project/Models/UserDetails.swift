@@ -8,28 +8,11 @@
 
 import Foundation
 
-public struct UserDetails: Decodable {
+public struct UserDetails: Codable {
     var id: Int
     var name: String
     var address: AddressInfo
     var phone: String
     var website: String
     var company: CompanyInfo
-}
-
-struct AddressInfo: Decodable {
-    var street: String
-    var suite: String
-    var city: String
-    var zipcode: String
-    var geo: GeoInfo
-}
-
-struct GeoInfo: Decodable {
-    var lat: String
-    var lng: String
-}
-
-struct CompanyInfo: Decodable {
-    var name: String
 }

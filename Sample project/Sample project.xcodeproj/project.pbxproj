@@ -19,9 +19,11 @@
 		263AE4C3233BA9100011EED0 /* JsonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4C2233BA9100011EED0 /* JsonService.swift */; };
 		263AE4C7233BDF9C0011EED0 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4C6233BDF9C0011EED0 /* UserDetails.swift */; };
 		26A6596B2350710800B28C91 /* ConstructViewsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6596A2350710800B28C91 /* ConstructViewsProtocol.swift */; };
-		26A6596D23545CE500B28C91 /* UserTable+Design.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6596C23545CE500B28C91 /* UserTable+Design.swift */; };
 		26F1D017235605F80023BCFF /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D016235605F80023BCFF /* UserViewController.swift */; };
 		26F1D019235606160023BCFF /* UserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26F1D018235606160023BCFF /* UserViewController.xib */; };
+		26F1D01B23572B810023BCFF /* AddressInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D01A23572B810023BCFF /* AddressInfo.swift */; };
+		26F1D01D23572B9C0023BCFF /* GeoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D01C23572B9C0023BCFF /* GeoInfo.swift */; };
+		26F1D01F23572BC00023BCFF /* CompanyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D01E23572BC00023BCFF /* CompanyInfo.swift */; };
 		B8F0A6045B0872251BD152C0 /* Pods_Sample_project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91326CF61CB6D226BA41884E /* Pods_Sample_project.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,9 +43,11 @@
 		263AE4C2233BA9100011EED0 /* JsonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonService.swift; sourceTree = "<group>"; };
 		263AE4C6233BDF9C0011EED0 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		26A6596A2350710800B28C91 /* ConstructViewsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstructViewsProtocol.swift; sourceTree = "<group>"; };
-		26A6596C23545CE500B28C91 /* UserTable+Design.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserTable+Design.swift"; sourceTree = "<group>"; };
 		26F1D016235605F80023BCFF /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		26F1D018235606160023BCFF /* UserViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserViewController.xib; sourceTree = "<group>"; };
+		26F1D01A23572B810023BCFF /* AddressInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressInfo.swift; sourceTree = "<group>"; };
+		26F1D01C23572B9C0023BCFF /* GeoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoInfo.swift; sourceTree = "<group>"; };
+		26F1D01E23572BC00023BCFF /* CompanyInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyInfo.swift; sourceTree = "<group>"; };
 		67E774D481429CC00B62AB71 /* Pods-Sample project.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sample project.release.xcconfig"; path = "Target Support Files/Pods-Sample project/Pods-Sample project.release.xcconfig"; sourceTree = "<group>"; };
 		91326CF61CB6D226BA41884E /* Pods_Sample_project.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Sample_project.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -81,7 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				2614E425234F68A6001071D9 /* UserTable.swift */,
-				26A6596C23545CE500B28C91 /* UserTable+Design.swift */,
 				2614E42B234F6935001071D9 /* Main.storyboard */,
 				26F1D016235605F80023BCFF /* UserViewController.swift */,
 				26F1D018235606160023BCFF /* UserViewController.xib */,
@@ -95,6 +98,9 @@
 			isa = PBXGroup;
 			children = (
 				263AE4C6233BDF9C0011EED0 /* UserDetails.swift */,
+				26F1D01C23572B9C0023BCFF /* GeoInfo.swift */,
+				26F1D01A23572B810023BCFF /* AddressInfo.swift */,
+				26F1D01E23572BC00023BCFF /* CompanyInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -281,11 +287,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2614E426234F68A6001071D9 /* UserTable.swift in Sources */,
+				26F1D01D23572B9C0023BCFF /* GeoInfo.swift in Sources */,
 				26F1D017235605F80023BCFF /* UserViewController.swift in Sources */,
-				26A6596D23545CE500B28C91 /* UserTable+Design.swift in Sources */,
+				26F1D01B23572B810023BCFF /* AddressInfo.swift in Sources */,
 				263AE4AF233BA88C0011EED0 /* AppDelegate.swift in Sources */,
 				2614E424234F6866001071D9 /* UserDetailsViewModel.swift in Sources */,
 				263AE4B1233BA88C0011EED0 /* SceneDelegate.swift in Sources */,
+				26F1D01F23572BC00023BCFF /* CompanyInfo.swift in Sources */,
 				26A6596B2350710800B28C91 /* ConstructViewsProtocol.swift in Sources */,
 				26201C19234F6AEF0041F0ED /* ViewController.swift in Sources */,
 				263AE4C7233BDF9C0011EED0 /* UserDetails.swift in Sources */,
