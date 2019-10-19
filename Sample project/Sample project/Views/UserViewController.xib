@@ -11,6 +11,7 @@
             <connections>
                 <outlet property="nameLabel" destination="xdM-CI-ncB" id="KJH-TH-75P"/>
                 <outlet property="phoneLabel" destination="GmA-nr-OiW" id="vCf-gz-KQ3"/>
+                <outlet property="userImage" destination="zaA-1V-Lo1" id="sbw-Cq-ezl"/>
                 <outlet property="view" destination="aS0-3v-Te5" id="KKr-et-df1"/>
             </connections>
         </placeholder>
@@ -31,17 +32,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="zaA-1V-Lo1">
-                                <rect key="frame" x="67" y="155" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GmA-nr-OiW">
-                                <rect key="frame" x="67" y="345" width="240" height="21"/>
+                                <rect key="frame" x="67" y="390" width="240" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="zaA-1V-Lo1">
+                                <rect key="frame" x="67" y="145" width="240" height="164"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </view>

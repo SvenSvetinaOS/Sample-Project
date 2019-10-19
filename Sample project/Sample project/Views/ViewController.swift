@@ -15,6 +15,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     var jsonService = JsonService()
     var dataArray = [UserDetails]()
+    var photos = [Photos]()
+    var images: Photos!
     var user: UserDetails!
     var viewModel: UserDetailsViewModel!
     
@@ -37,7 +39,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let cell = userTableView.dequeueReusableCell(withIdentifier: "userCell") as! UserTable
         let user = self.dataArray[indexPath.row]
-        self.user = user
         viewModel = UserDetailsViewModel(userDetails: user)
         
         cell.titleLabel?.text = viewModel.name
@@ -49,10 +50,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let indexPath = userTableView.indexPathForSelectedRow
         let currentCell = userTableView.cellForRow(at: indexPath!) as! UserTable
         let userViewController = UserViewController()
+        
         userTableView.deselectRow(at: indexPath!, animated: true)
         present(userViewController, animated: true, completion: nil)
         userViewController.nameLabel.text = currentCell.titleLabel.text
         userViewController.phoneLabel?.text = viewModel.phone
+        let photoURL = URL(string: photos.first?.url ?? "")
+        let photoData = try? Data(contentsOf: photoURL!)
+        let image = UIImage(data: photoData!)
+        userViewController.userImage.image = image
     }
     
     func setupTableView() {
@@ -73,6 +79,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
                 self.userTableView.reloadData()
                 self.userTableView.isHidden = false
+            }
+        }
+        jsonService.fetchPhotos { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let photoData):
+                    self.photos = photoData
+                }
+                self.userTableView.reloadData()
             }
         }
     }
