@@ -13,11 +13,6 @@ enum DataError: Error {
     case brokenAPI
 }
 
-enum jsonString: String {
-    case users
-    case photos
-}
-
 struct JsonService {
     let apiUrl: URL
     let photoUrl: URL
@@ -52,8 +47,6 @@ struct JsonService {
     }
     
     func fetchPhotos(_ completion: @escaping (Result<[Photos], DataError>) -> Void) {
-        
-        
         let dataTask = URLSession.shared.dataTask(with: photoUrl) { (data, response, error) in
             guard let data = data else { completion (.failure(.invalidData))
                 return
@@ -70,3 +63,4 @@ struct JsonService {
         dataTask.resume()
     }
 }
+

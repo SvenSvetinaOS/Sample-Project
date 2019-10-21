@@ -11,7 +11,7 @@ import Foundation
 import PureLayout
 
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class UserTableViewController: UITableViewController {
     
     var jsonService = JsonService()
     var dataArray = [UserDetails]()
@@ -21,51 +21,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var viewModel: UserDetailsViewModel!
     
     @IBOutlet weak var fetchButton: UIButton!
-    @IBOutlet weak var userTableView: UITableView!
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.dataArray.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = userTableView.dequeueReusableCell(withIdentifier: "userCell") as! UserTable
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userTableCell", for: indexPath)
         let user = self.dataArray[indexPath.row]
-        viewModel = UserDetailsViewModel(userDetails: user)
+        let address = self.dataArray
+        viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
         
-        cell.titleLabel?.text = viewModel.name
+        cell.textLabel?.text = viewModel.name
+        cell.textLabel?.sizeToFit()
         
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexPath = userTableView.indexPathForSelectedRow
-        let currentCell = userTableView.cellForRow(at: indexPath!) as! UserTable
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let indexPath = tableView.indexPathForSelectedRow
+        let currentCell = tableView.cellForRow(at: indexPath!) as! UITableViewCell
         let userViewController = UserViewController()
         
-        userTableView.deselectRow(at: indexPath!, animated: true)
+        tableView.deselectRow(at: indexPath!, animated: true)
         present(userViewController, animated: true, completion: nil)
-        userViewController.nameLabel.text = currentCell.titleLabel.text
+        
+        userViewController.nameLabel.text = currentCell.textLabel?.text
         userViewController.phoneLabel?.text = viewModel.phone
+        
         let photoURL = URL(string: photos.first?.url ?? "")
         let photoData = try? Data(contentsOf: photoURL!)
         let image = UIImage(data: photoData!)
         userViewController.userImage.image = image
-    }
-    
-    func setupTableView() {
-        userTableView.isHidden = true
-        userTableView.dataSource = self
-        userTableView.delegate = self
-        userTableView.register(UINib(nibName: "UserTable", bundle: nil), forCellReuseIdentifier: "userCell")
     }
     
     func populateTableView() {
@@ -77,8 +69,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 case .success(let data):
                     self.dataArray = data
                 }
-                self.userTableView.reloadData()
-                self.userTableView.isHidden = false
+                self.tableView.reloadData()
             }
         }
         jsonService.fetchPhotos { result in
@@ -89,14 +80,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 case .success(let photoData):
                     self.photos = photoData
                 }
-                self.userTableView.reloadData()
+                self.tableView.reloadData()
             }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupTableView()
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "userTableCell")
     }
     
     @IBAction func buttonTapped(_ sender: Any) {

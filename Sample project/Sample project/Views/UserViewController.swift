@@ -17,6 +17,5 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        nameLabel.text = userDetailsViewModel.name
     }
 }
