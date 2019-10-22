@@ -34,7 +34,7 @@ class UserTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "userTableCell", for: indexPath)
         let user = self.dataArray[indexPath.row]
-        let address = self.dataArray
+        
         viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
         
         cell.textLabel?.text = viewModel.name
@@ -44,14 +44,15 @@ class UserTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexPath = tableView.indexPathForSelectedRow
-        let currentCell = tableView.cellForRow(at: indexPath!) as! UITableViewCell
+        let user = self.dataArray[indexPath.row]
+        viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
+        
         let userViewController = UserViewController()
         
-        tableView.deselectRow(at: indexPath!, animated: true)
+       
         present(userViewController, animated: true, completion: nil)
         
-        userViewController.nameLabel.text = currentCell.textLabel?.text
+        userViewController.nameLabel.text = viewModel.name
         userViewController.phoneLabel?.text = viewModel.phone
         
         let photoURL = URL(string: photos.first?.url ?? "")
