@@ -16,7 +16,6 @@ class UserTableViewController: UITableViewController {
     var jsonService = JsonService()
     var dataArray = [UserDetails]()
     var photos = [Photos]()
-    var images: Photos!
     var user: UserDetails!
     var viewModel: UserDetailsViewModel!
     
@@ -31,27 +30,23 @@ class UserTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "userTableCell", for: indexPath)
         let user = self.dataArray[indexPath.row]
-        let address = self.dataArray
-        viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
+        let viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
         
         cell.textLabel?.text = viewModel.name
-        cell.textLabel?.sizeToFit()
-        
+    
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexPath = tableView.indexPathForSelectedRow
-        let currentCell = tableView.cellForRow(at: indexPath!) as! UITableViewCell
-        let userViewController = UserViewController()
+        let user = self.dataArray[indexPath.row]
+        let viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
         
-        tableView.deselectRow(at: indexPath!, animated: true)
+        let userViewController = UserViewController()
         present(userViewController, animated: true, completion: nil)
         
-        userViewController.nameLabel.text = currentCell.textLabel?.text
+        userViewController.nameLabel.text = viewModel.name
         userViewController.phoneLabel?.text = viewModel.phone
         
         let photoURL = URL(string: photos.first?.url ?? "")

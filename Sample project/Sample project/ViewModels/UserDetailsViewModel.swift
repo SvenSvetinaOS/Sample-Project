@@ -16,7 +16,6 @@ public class UserDetailsViewModel {
     private let geoInfo: GeoInfo
     private let companyInfo: CompanyInfo
     
-    
     init(userDetails: UserDetails,
          addressInfo: AddressInfo,
          geoInfo: GeoInfo,
@@ -28,13 +27,13 @@ public class UserDetailsViewModel {
         self.geoInfo = geoInfo
         self.companyInfo = companyInfo
     }
+    
     public var id: Int {
         return userDetails.id
     }
     public var name: String {
         return userDetails.name
     }
-    
     public var phone: String {
         return userDetails.phone
     }
