@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2614E424234F6866001071D9 /* UserDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2614E423234F6866001071D9 /* UserDetailsViewModel.swift */; };
 		2614E42C234F6935001071D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2614E42B234F6935001071D9 /* Main.storyboard */; };
 		26201C19234F6AEF0041F0ED /* UserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26201C18234F6AEF0041F0ED /* UserTableViewController.swift */; };
 		263AE4AF233BA88C0011EED0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4AE233BA88C0011EED0 /* AppDelegate.swift */; };
 		263AE4B1233BA88C0011EED0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4B0233BA88C0011EED0 /* SceneDelegate.swift */; };
 		263AE4B8233BA88E0011EED0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263AE4B7233BA88E0011EED0 /* Assets.xcassets */; };
 		263AE4BB233BA88E0011EED0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263AE4B9233BA88E0011EED0 /* LaunchScreen.storyboard */; };
-		263AE4C3233BA9100011EED0 /* JsonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4C2233BA9100011EED0 /* JsonService.swift */; };
-		263AE4C7233BDF9C0011EED0 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4C6233BDF9C0011EED0 /* UserDetails.swift */; };
+		263AE4C3233BA9100011EED0 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4C2233BA9100011EED0 /* NetworkService.swift */; };
+		263AE4C7233BDF9C0011EED0 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263AE4C6233BDF9C0011EED0 /* Users.swift */; };
+		26B9968F2366FD9100D16E2F /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26B9968E2366FD9100D16E2F /* UserTableViewCell.xib */; };
+		26B996912366FDA100D16E2F /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B996902366FDA100D16E2F /* UserTableViewCell.swift */; };
+		26B996932367282400D16E2F /* Posts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B996922367282400D16E2F /* Posts.swift */; };
+		26B99695236878D000D16E2F /* Comments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B99694236878D000D16E2F /* Comments.swift */; };
+		26B9969723687CAD00D16E2F /* Albums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B9969623687CAD00D16E2F /* Albums.swift */; };
 		26F1D017235605F80023BCFF /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D016235605F80023BCFF /* UserViewController.swift */; };
 		26F1D019235606160023BCFF /* UserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26F1D018235606160023BCFF /* UserViewController.xib */; };
 		26F1D01B23572B810023BCFF /* AddressInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D01A23572B810023BCFF /* AddressInfo.swift */; };
@@ -27,7 +31,6 @@
 
 /* Begin PBXFileReference section */
 		1A9B48477568D9D08CFD52F7 /* Pods-Sample project.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Sample project.debug.xcconfig"; path = "Target Support Files/Pods-Sample project/Pods-Sample project.debug.xcconfig"; sourceTree = "<group>"; };
-		2614E423234F6866001071D9 /* UserDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModel.swift; sourceTree = "<group>"; };
 		2614E42B234F6935001071D9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		26201C18234F6AEF0041F0ED /* UserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewController.swift; sourceTree = "<group>"; };
 		263AE4AB233BA88C0011EED0 /* Sample project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sample project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -36,8 +39,13 @@
 		263AE4B7233BA88E0011EED0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		263AE4BA233BA88E0011EED0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		263AE4BC233BA88E0011EED0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		263AE4C2233BA9100011EED0 /* JsonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonService.swift; sourceTree = "<group>"; };
-		263AE4C6233BDF9C0011EED0 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
+		263AE4C2233BA9100011EED0 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		263AE4C6233BDF9C0011EED0 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		26B9968E2366FD9100D16E2F /* UserTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserTableViewCell.xib; sourceTree = "<group>"; };
+		26B996902366FDA100D16E2F /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
+		26B996922367282400D16E2F /* Posts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Posts.swift; sourceTree = "<group>"; };
+		26B99694236878D000D16E2F /* Comments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comments.swift; sourceTree = "<group>"; };
+		26B9969623687CAD00D16E2F /* Albums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Albums.swift; sourceTree = "<group>"; };
 		26F1D016235605F80023BCFF /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		26F1D018235606160023BCFF /* UserViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserViewController.xib; sourceTree = "<group>"; };
 		26F1D01A23572B810023BCFF /* AddressInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressInfo.swift; sourceTree = "<group>"; };
@@ -72,7 +80,6 @@
 		26201C13234F6A630041F0ED /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				2614E423234F6866001071D9 /* UserDetailsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -84,6 +91,8 @@
 				26F1D016235605F80023BCFF /* UserViewController.swift */,
 				26F1D018235606160023BCFF /* UserViewController.xib */,
 				26201C18234F6AEF0041F0ED /* UserTableViewController.swift */,
+				26B9968E2366FD9100D16E2F /* UserTableViewCell.xib */,
+				26B996902366FDA100D16E2F /* UserTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -91,11 +100,14 @@
 		26201C1A234F6B150041F0ED /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				263AE4C6233BDF9C0011EED0 /* UserDetails.swift */,
+				263AE4C6233BDF9C0011EED0 /* Users.swift */,
 				26F1D01C23572B9C0023BCFF /* GeoInfo.swift */,
 				26F1D01A23572B810023BCFF /* AddressInfo.swift */,
 				26F1D01E23572BC00023BCFF /* CompanyInfo.swift */,
 				26F1D020235854920023BCFF /* Photos.swift */,
+				26B996922367282400D16E2F /* Posts.swift */,
+				26B99694236878D000D16E2F /* Comments.swift */,
+				26B9969623687CAD00D16E2F /* Albums.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -103,7 +115,7 @@
 		26201C1C234F6B3F0041F0ED /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				263AE4C2233BA9100011EED0 /* JsonService.swift */,
+				263AE4C2233BA9100011EED0 /* NetworkService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -222,6 +234,7 @@
 				26F1D019235606160023BCFF /* UserViewController.xib in Resources */,
 				2614E42C234F6935001071D9 /* Main.storyboard in Resources */,
 				263AE4B8233BA88E0011EED0 /* Assets.xcassets in Resources */,
+				26B9968F2366FD9100D16E2F /* UserTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,14 +295,17 @@
 				26F1D01D23572B9C0023BCFF /* GeoInfo.swift in Sources */,
 				26F1D017235605F80023BCFF /* UserViewController.swift in Sources */,
 				26F1D01B23572B810023BCFF /* AddressInfo.swift in Sources */,
+				26B99695236878D000D16E2F /* Comments.swift in Sources */,
 				263AE4AF233BA88C0011EED0 /* AppDelegate.swift in Sources */,
-				2614E424234F6866001071D9 /* UserDetailsViewModel.swift in Sources */,
+				26B996912366FDA100D16E2F /* UserTableViewCell.swift in Sources */,
+				26B996932367282400D16E2F /* Posts.swift in Sources */,
 				26F1D021235854920023BCFF /* Photos.swift in Sources */,
 				263AE4B1233BA88C0011EED0 /* SceneDelegate.swift in Sources */,
 				26F1D01F23572BC00023BCFF /* CompanyInfo.swift in Sources */,
 				26201C19234F6AEF0041F0ED /* UserTableViewController.swift in Sources */,
-				263AE4C7233BDF9C0011EED0 /* UserDetails.swift in Sources */,
-				263AE4C3233BA9100011EED0 /* JsonService.swift in Sources */,
+				26B9969723687CAD00D16E2F /* Albums.swift in Sources */,
+				263AE4C7233BDF9C0011EED0 /* Users.swift in Sources */,
+				263AE4C3233BA9100011EED0 /* NetworkService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -429,6 +445,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 37NP6KPC8R;
 				INFOPLIST_FILE = "Sample project/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -448,6 +465,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 37NP6KPC8R;
 				INFOPLIST_FILE = "Sample project/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

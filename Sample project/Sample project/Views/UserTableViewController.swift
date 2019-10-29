@@ -8,90 +8,67 @@
 
 import UIKit
 import Foundation
-import PureLayout
 
-
-class UserTableViewController: UITableViewController {
+class UserTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var jsonService = JsonService()
-    var dataArray = [UserDetails]()
-    var photos = [Photos]()
+    var networkService = NetworkService()
     var images: Photos!
-    var user: UserDetails!
-    var viewModel: UserDetailsViewModel!
+    var user: Users!
     
     @IBOutlet weak var fetchButton: UIButton!
+    @IBOutlet weak var tableView: UITableView!
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.dataArray.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "userTableCell", for: indexPath)
-        let user = self.dataArray[indexPath.row]
-        
-        viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
-        
-        cell.textLabel?.text = viewModel.name
-        cell.textLabel?.sizeToFit()
-        
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.dataArray[indexPath.row]
-        viewModel = UserDetailsViewModel(userDetails: user, addressInfo: user.address, geoInfo: user.address.geo, companyInfo: user.company)
-        
-        let userViewController = UserViewController()
-        
-       
-        present(userViewController, animated: true, completion: nil)
-        
-        userViewController.nameLabel.text = viewModel.name
-        userViewController.phoneLabel?.text = viewModel.phone
-        
-        let photoURL = URL(string: photos.first?.url ?? "")
-        let photoData = try? Data(contentsOf: photoURL!)
-        let image = UIImage(data: photoData!)
-        userViewController.userImage.image = image
-    }
-    
-    func populateTableView() {
-        jsonService.fetchData() { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let data):
-                    self.dataArray = data
-                }
-                self.tableView.reloadData()
-            }
-        }
-        jsonService.fetchPhotos { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let photoData):
-                    self.photos = photoData
-                }
-                self.tableView.reloadData()
-            }
-        }
+    @IBAction func loadButtonTapped(_ sender: Any) {
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "userTableCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UINib(nibName: "UserTableViewCell", bundle: nil), forCellReuseIdentifier: "userTableViewCell")
+        networkService.fetchAllData()
     }
     
-    @IBAction func buttonTapped(_ sender: Any) {
-        populateTableView()
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return networkService.users.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userTableViewCell") as! UserTableViewCell
+        let user = networkService.users[indexPath.row]
+        
+        cell.titleLabel.text = user.name
+        cell.titleLabel.sizeToFit()
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let title = "Users"
+        
+        return title
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = networkService.users[indexPath.row]
+        
+        let userViewController = UserViewController()
+        
+        present(userViewController, animated: true, completion: nil)
+        
+        userViewController.nameLabel.text = user.name
+        userViewController.phoneLabel?.text = user.phone
+        
+        let photoURL = URL(string: networkService.photos.first?.url ?? "")
+        let photoData = try? Data(contentsOf: photoURL!)
+        let image = UIImage(data: photoData!)
+        userViewController.userImage.image = image
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
