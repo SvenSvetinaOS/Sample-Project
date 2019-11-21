@@ -20,6 +20,8 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     var user: UserModel?
     var networkService: NetworkService?
     var albumModelForUser = [AlbumModel]()
+    var photoModelForUser = [PhotoModel]()
+    var refreshControl = UIRefreshControl()
     
     convenience init(user: UserModel, networkService: NetworkService) {
         self.init()
@@ -32,9 +34,9 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         setupLayout()
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return CGSize(width: 100, height: 100)
+//    }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let sectionHeader = albumCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "AlbumSectionHeader", for: indexPath) as! AlbumSectionHeader
@@ -54,16 +56,14 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return photoModelForUser.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = albumCollectionView.dequeueReusableCell(withReuseIdentifier: "albumCell", for: indexPath) as! AlbumCell
+        let photosForUser = albumModelForUser[indexPath.section].photoModel
+        let thumbnailUrl = photosForUser[indexPath.row].thumbnailUrl
         
-        let albumModelForUser = self.albumModelForUser[indexPath.section]
-        
-        let thumbnailUrl = albumModelForUser.photoModel.first?.thumbnailUrl
-        
-        setImage(string: thumbnailUrl!, imageView: cell.albumImageView)
+        setImage(string: thumbnailUrl, imageView: cell.albumImageView)
         
         return cell
     }
@@ -73,24 +73,21 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         
         let photoViewController = PhotoViewController()
         photoViewController.photoModelForUser = photoModel
-        
-        navigationController?.pushViewController(photoViewController, animated: true)
     }
     
     func setupLayout() {
-        let spacing: CGFloat = 5.0
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: spacing, left: spacing, bottom: spacing, right: spacing)
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
         
-        albumCollectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
+        albumCollectionView = UICollectionView(frame: view.frame, collectionViewLayout: createCompositionalLayout())
         albumCollectionView.register(UINib(nibName: "AlbumSectionHeader", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "AlbumSectionHeader")
         albumCollectionView.register(UINib(nibName: "AlbumCell", bundle: nil), forCellWithReuseIdentifier: "albumCell")
         albumCollectionView.delegate = self
         albumCollectionView.dataSource = self
-        albumCollectionView.backgroundColor = .white
+        albumCollectionView.backgroundColor = .black
+        albumCollectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(albumCollectionView)
+        
+        refreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
+        albumCollectionView.addSubview(refreshControl)
         
         albumCollectionView.autoPinEdge(toSuperviewEdge: .top)
         albumCollectionView.autoPinEdge(toSuperviewEdge: .bottom)
@@ -102,8 +99,8 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     
     func setImage(string: String, imageView: UIImageView) {
         let url = URL(string: string)
-        let processor = DownsamplingImageProcessor(size: imageView.frame.size) |> RoundCornerImageProcessor(cornerRadius: 0)
-        imageView.kf.indicatorType = .none
+        let processor = DownsamplingImageProcessor(size: imageView.frame.size) |> RoundCornerImageProcessor(cornerRadius: 5)
+        imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
             placeholder: UIImage(named: "placeholderImage"),
@@ -113,14 +110,40 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
                 .transition(.fade(1)),
                 .cacheOriginalImage
             ])
-        {
-            result in
-            switch result {
-            case .success(let value):
-                print("Task done for: \(value.source.url?.absoluteString ?? "")")
-            case .failure(let error):
-                print("Job failed: \(error.localizedDescription)")
+    }
+    @objc func reloadData() {
+        refreshControl.beginRefreshing()
+        albumCollectionView.reloadData()
+        refreshControl.endRefreshing()
+    }
+    
+    func createCompositionalLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, layotEnvironment in
+            let photoModelForUser = self.photoModelForUser[sectionIndex]
+            
+            switch photoModelForUser.thumbnailUrl {
+            default:
+                return self.createSection()
             }
         }
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.interSectionSpacing = 3
+        layout.configuration = config
+        return layout
+    }
+    
+    func createSection() -> NSCollectionLayoutSection {
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(25)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+        layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 3, bottom: 0, trailing: 3)
+        let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .estimated(150), heightDimension: .estimated(150))
+        let layoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: layoutGroupSize, subitems: [layoutItem])
+        let layoutSection = NSCollectionLayoutSection(group: layoutGroup)
+        layoutSection.boundarySupplementaryItems = [sectionHeader]
+        
+        layoutSection.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+        
+        return layoutSection
     }
 }

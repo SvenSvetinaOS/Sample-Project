@@ -56,6 +56,8 @@ class UserViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let albumModelForUser = userModel[indexPath.row].albumModel
         albumViewController.albumModelForUser = albumModelForUser
+        let photoModelForUser = userModel[indexPath.section].albumModel[indexPath.row].photoModel
+        albumViewController.photoModelForUser = photoModelForUser
         
         navigationController?.pushViewController(albumViewController, animated: true)
         
