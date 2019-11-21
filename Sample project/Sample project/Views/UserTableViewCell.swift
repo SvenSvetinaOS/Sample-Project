@@ -8,16 +8,23 @@
 
 import Foundation
 import UIKit
+import PureLayout
 
 class UserTableViewCell: UITableViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var phoneLabel: UILabel!
+    @IBOutlet weak var webLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    func configureWithCellModel(_ cellModel: UserModel) {
+        titleLabel.text = cellModel.name
+        phoneLabel.text = "Phone: \(cellModel.phone)"
+        webLabel.text = "Web: \(cellModel.website)"
+        titleLabel.sizeToFit()
+        phoneLabel.sizeToFit()
+        webLabel.sizeToFit()
     }
 }

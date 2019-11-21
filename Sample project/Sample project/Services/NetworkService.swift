@@ -8,174 +8,80 @@
 
 import Foundation
 
-enum DataError: Error {
-    case invalidData
-    case brokenAPI
-}
-
 class NetworkService {
     
-    let apiUrl: URL
-    let photoUrl: URL
-    let postsUrl: URL
-    let commentsUrl: URL
-    let albumsUrl: URL
-    var users = [Users]()
-    var photos = [Photos]()
-    var posts = [Posts]()
-    var comments = [Comments]()
-    var albums = [Albums]()
+    var users = [UserAPI]()
+    var photos = [PhotoAPI]()
+    var posts = [PostAPI]()
+    var comments = [CommentAPI]()
+    var albums = [AlbumAPI]()
+    let dispatchGroup = DispatchGroup()
+    var userModel: UserModel!
     
-    init() {
-        let APIString = "https://jsonplaceholder.typicode.com/users"
-        let photosString = "https://jsonplaceholder.typicode.com/photos"
-        let postsString = "https://jsonplaceholder.typicode.com/posts"
-        let commentsString = "https://jsonplaceholder.typicode.com/comments"
-        let albumsString = "https://jsonplaceholder.typicode.com/albums"
+    let usersString = "https://jsonplaceholder.typicode.com/users"
+    let photosString = "https://jsonplaceholder.typicode.com/photos"
+    let postsString = "https://jsonplaceholder.typicode.com/posts"
+    let commentsString = "https://jsonplaceholder.typicode.com/comments"
+    let albumsString = "https://jsonplaceholder.typicode.com/albums"
+    
+    func fetchData(completion: @escaping ([UserModel]) -> Void) {
+        dispatchGroup.enter()
+        let userResource: Resources<UserAPI> = Resources(path: usersString)
+        userResource.fetchResourceData { [weak self] user in
+            self?.users = user
+            self?.dispatchGroup.leave()
+        }
+        dispatchGroup.enter()
+        let albumResource: Resources<AlbumAPI> = Resources(path: albumsString)
+        albumResource.fetchResourceData { [weak self] album in
+            self?.albums = album
+            self?.dispatchGroup.leave()
+        }
+        dispatchGroup.enter()
+        let photoResource: Resources<PhotoAPI> = Resources(path: photosString)
+        photoResource.fetchResourceData { [weak self] photo in
+            self?.photos = photo
+            self?.dispatchGroup.leave()
+        }
+        dispatchGroup.enter()
+        let postResource: Resources<PostAPI> = Resources(path: postsString)
+        postResource.fetchResourceData { [weak self] post in
+            self?.posts = post
+            self?.dispatchGroup.leave()
+        }
+        dispatchGroup.enter()
+        let commentResource: Resources<CommentAPI> = Resources(path: commentsString)
+        commentResource.fetchResourceData { [weak self] comment in
+            self?.comments = comment
+            self?.dispatchGroup.leave()
+        }
+        dispatchGroup.notify(queue: .main, execute: {
+            let userModels = self.createUsers(users: self.users, albums: self.albums, photos: self.photos)
+            completion(userModels)
+        })
+    }
+    
+    func createUsers(users: [UserAPI], albums: [AlbumAPI], photos: [PhotoAPI]) -> [UserModel] {
+        var photosByAlbumId = [Int: [PhotoModel]]()
+        var albumsByUserId = [Int : [AlbumModel]]()
+        var userModels = [UserModel]()
+    
+        for photo in photos {
+            var photosArray = photosByAlbumId[photo.albumId, default: [PhotoModel]()]
+            photosArray.append(PhotoModel(photoAPI: photo))
+            photosByAlbumId[photo.albumId] = photosArray
+        }
         
-        guard let apiUrl = URL(string: APIString) else { fatalError() }
-        self.apiUrl = apiUrl
-        guard let photoUrl = URL(string: photosString) else { fatalError() }
-        self.photoUrl = photoUrl
-        guard let postsUrl = URL(string: postsString) else { fatalError() }
-        self.postsUrl = postsUrl
-        guard let commentsUrl = URL(string: commentsString) else { fatalError() }
-        self.commentsUrl = commentsUrl
-        guard let albumsUrl = URL(string: albumsString) else { fatalError() }
-        self.albumsUrl = albumsUrl
-    }
-    
-    func fetchUsers(_ completion: @escaping (Result<[Users], DataError>) -> Void) {
-        let dataTask = URLSession.shared.dataTask(with: apiUrl) { (data, response, error) in
-            guard let data = data else { completion (.failure(.invalidData))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let details = try decoder.decode([Users].self, from: data)
-                completion(.success(details))
-            } catch  {
-                completion (.failure(.brokenAPI))
-            }
+        for album in albums {
+            var albumsArray = albumsByUserId[album.userId, default: [AlbumModel]()]
+            albumsArray.append(AlbumModel(albumAPI: album, photoModel: photosByAlbumId[album.id]!))
+            albumsByUserId[album.userId] = albumsArray
         }
-        dataTask.resume()
-    }
-    
-    func fetchPhotos(_ completion: @escaping (Result<[Photos], DataError>) -> Void) {
-        let dataTask = URLSession.shared.dataTask(with: photoUrl) { (data, response, error) in
-            guard let data = data else { completion (.failure(.invalidData))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let details = try decoder.decode([Photos].self, from: data)
-                completion(.success(details))
-            } catch  {
-                completion (.failure(.brokenAPI))
-            }
-            
+        
+        for user in users {
+            let userModel = UserModel(userAPI: user, albumModel: albumsByUserId[user.id]!)
+            userModels.append(userModel)
         }
-        dataTask.resume()
-    }
-    
-    func fetchPosts(_ completion: @escaping (Result<[Posts], DataError>) -> Void) {
-        let dataTask = URLSession.shared.dataTask(with: postsUrl) { (data, response, error) in
-            guard let data = data else { completion (.failure(.invalidData))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let details = try decoder.decode([Posts].self, from: data)
-                completion(.success(details))
-            } catch  {
-                completion (.failure(.brokenAPI))
-            }
-        }
-        dataTask.resume()
-    }
-    func fetchComments(_ completion: @escaping (Result<[Comments], DataError>) -> Void) {
-        let dataTask = URLSession.shared.dataTask(with: commentsUrl) { (data, response, error) in
-            guard let data = data else { completion (.failure(.invalidData))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let details = try decoder.decode([Comments].self, from: data)
-                completion(.success(details))
-            } catch  {
-                completion (.failure(.brokenAPI))
-            }
-        }
-        dataTask.resume()
-    }
-    
-    func fetchAlbums(_ completion: @escaping (Result<[Albums], DataError>) -> Void) {
-         let dataTask = URLSession.shared.dataTask(with: albumsUrl) { (data, response, error) in
-             guard let data = data else { completion (.failure(.invalidData))
-                 return
-             }
-             do {
-                 let decoder = JSONDecoder()
-                 let details = try decoder.decode([Albums].self, from: data)
-                 completion(.success(details))
-             } catch  {
-                 completion (.failure(.brokenAPI))
-             }
-         }
-         dataTask.resume()
-     }
-    
-    func fetchAllData() {
-        fetchUsers() { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let data):
-                    self?.users = data
-                }
-            }
-        }
-        fetchPhotos { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let photoData):
-                    self?.photos = photoData
-                }
-            }
-        }
-        fetchPosts() { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let postData):
-                    self?.posts = postData
-                }
-            }
-        }
-        fetchComments() { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let data):
-                    self?.comments = data
-                }
-            }
-        }
-        fetchAlbums() { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let data):
-                    self?.albums = data
-                }
-            }
-        }
+        return userModels
     }
 }
-

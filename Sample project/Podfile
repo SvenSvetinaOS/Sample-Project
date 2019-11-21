@@ -7,5 +7,6 @@ target 'Sample project' do
 
   # Pods for Sample project
   pod "PureLayout"
+  pod "Kingfisher"
 
 end
