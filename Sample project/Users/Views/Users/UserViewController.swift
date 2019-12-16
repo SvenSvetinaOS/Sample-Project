@@ -9,61 +9,125 @@
 import UIKit
 import Foundation
 
-class UserViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class UserViewController: UIViewController {
+    private let cellHeight: CGFloat = 120.0
+    let usersTitle = "Users"
+    let loading = "Loading"
+    let search = "Searing Users"
+    let albums = "Albums"
+    let posts = "Posts"
+    let delete = "Delete"
     
     var networkService = NetworkService()
-    var userModel = [UserModel]()
+    var users = [UserModel]()
+    var filteredUsers = [UserModel]()
     var refreshControl = UIRefreshControl()
+    let searchController = UISearchController(searchResultsController: nil)
     
     let tableView = UITableView()
-    
-    override func loadView() {
+    let tableHeader = UITableViewHeaderFooterView()
+        
+    override func viewDidLoad() {
         super.loadView()
+        setupTableView()
         setupLayout()
+        setupSearch()
         fetchData()
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    func setupTableView() {
+        tableView.separatorStyle = .none
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UINib(nibName: UserTableViewCell.identifier, bundle: nil), forCellReuseIdentifier: UserTableViewCell.identifier)
     }
     
+    func setupLayout() {
+        view.addSubview(tableView)
+        navigationItem.title = usersTitle
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+
+        tableView.keyboardDismissMode = .onDrag
+        
+        refreshControl.attributedTitle = NSAttributedString(string: loading)
+        refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+    
+    func fetchData() {
+        networkService.fetchData() { [weak self] users in
+            self?.users = users
+            self?.filteredUsers = users
+            self?.refreshControl.endRefreshing()
+            self?.tableView.reloadData()
+        }
+    }
+    
+    func filterContent(searchText: String?) {
+        if let searchText = searchText, !searchText.isEmpty {
+            filteredUsers = users.filter { user in
+                return user.name.lowercased().contains(searchText.lowercased())
+            }
+        } else {
+            filteredUsers = users
+        }
+        tableView.reloadData()
+    }
+    
+    @objc func refreshTableView() {
+        fetchData()
+    }
+}
+
+// MARK: UISearchControllerDelegate
+extension UserViewController: UISearchControllerDelegate {
+    
+    func setupSearch() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = search
+        searchController.delegate = self
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
+}
+// MARK: UISearchResultsUpdating
+extension UserViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        filterContent(searchText: searchBar.text)
+    }
+}
+// MARK: UITableViewDataSource
+extension UserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userModel.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        120.0
+        return filteredUsers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "userTableViewCell") as! UserTableViewCell
-        cell.configureWithCellModel(userModel[indexPath.row], photoModel: userModel[indexPath.row].albumModel[indexPath.row].photoModel)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.identifier) as! UserTableViewCell
+        let user = filteredUsers[indexPath.row]
+ 
+        cell.configure(
+            cellModel: user,
+            photoModel: user.albumModel[indexPath.section].photoModel)
         
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete", handler: { (action,view,completion) in
-            
-            self.userModel.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .fade)
-            completion(true)
-        })
-        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-        configuration.performsFirstActionWithFullSwipe = false
-        return configuration
-    }
-    
+}
+// MARK: UITableViewDelegate
+extension UserViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let presentAlbums = UIContextualAction(style: .normal, title: "Albums", handler: { [weak self] action, view, completion in
+        let presentAlbums = UIContextualAction(style: .normal, title: albums, handler: { [weak self] action, view, completion in
             let albumViewController = AlbumViewController()
-            let albumModelForUser = self?.userModel[indexPath.row].albumModel
+            let albumModelForUser = self?.filteredUsers[indexPath.row].albumModel
             albumViewController.albumModelForUser = albumModelForUser!
-            let photoModelForUser = self?.userModel[indexPath.section].albumModel[indexPath.row].photoModel
+            let photoModelForUser = self?.filteredUsers[indexPath.section].albumModel[indexPath.row].photoModel
             albumViewController.photoModelForUser = photoModelForUser!
             
             self?.navigationController?.pushViewController(albumViewController, animated: true)
@@ -72,12 +136,12 @@ class UserViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
         presentAlbums.backgroundColor = .gray
         
-        let presentPosts = UIContextualAction(style: .normal, title: "Posts", handler: { [weak self] action, view, completion in
+        let presentPosts = UIContextualAction(style: .normal, title: posts, handler: { [weak self] action, view, completion in
             let postViewController = PostViewController()
-            let postModelForUser = self?.userModel[indexPath.row].postModel
+            let postModelForUser = self?.filteredUsers[indexPath.row].postModel
             postViewController.postModelForUser = postModelForUser!
-            let userModelForPosts = self?.userModel
-            postViewController.userModel = userModelForPosts!
+            let userModelForPosts = self?.filteredUsers
+            postViewController.users = userModelForPosts!
             
             self?.navigationController?.pushViewController(postViewController, animated: true)
             
@@ -90,33 +154,30 @@ class UserViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return configuration
     }
     
-    func setupLayout() {
-        view.addSubview(tableView)
-        navigationItem.title = "Users"
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        
-        refreshControl.attributedTitle = NSAttributedString(string: "Loading Users")
-        refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
-        tableView.refreshControl = refreshControl
-        
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: delete, handler: { (action,view,completion) in
+            
+            let userToDelete = self.filteredUsers[indexPath.row]
+            
+            self.filteredUsers.remove(at: indexPath.row)
+            self.users.removeAll(where: {
+                $0.id == userToDelete.id
+            })
+            
+            self.tableView.deleteRows(at: [indexPath], with: .fade)
+            completion(true)
+            
+        })
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
     }
     
-    func fetchData() {
-        networkService.fetchData() { [weak self] users in
-            self?.userModel = users
-            self?.tableView.dataSource = self
-            self?.tableView.delegate = self
-            self?.tableView.register(UINib(nibName: "UserTableViewCell", bundle: nil), forCellReuseIdentifier: "userTableViewCell")
-            self?.tableView.reloadData()
-            self?.refreshControl.endRefreshing()
-        }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeight
     }
     
-    @objc func refreshTableView() {
-        fetchData()
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

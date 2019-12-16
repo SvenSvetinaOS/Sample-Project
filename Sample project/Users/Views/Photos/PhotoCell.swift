@@ -11,9 +11,12 @@ import UIKit
 
 class PhotoCell: UICollectionViewCell {
     
+    static var identifier = String(describing: self)
+    
     @IBOutlet weak var photoImageView: UIImageView!
      
     override func awakeFromNib() {
         super.awakeFromNib()
+        
     }
 }

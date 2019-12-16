@@ -9,6 +9,8 @@
 import UIKit
 
 class AlbumSectionHeader: UICollectionReusableView {
+    
+    static let identifier = String(describing: AlbumSectionHeader.self)
 
     @IBOutlet weak var albumName: UILabel!
     
@@ -16,10 +18,8 @@ class AlbumSectionHeader: UICollectionReusableView {
         super.awakeFromNib()
     }
     
-    func configureWithModel(_ cellModel: [AlbumModel], _ indexPath: IndexPath) {
+    func configure(cellModel: [AlbumModel], indexPath: IndexPath) {
         albumName.text = cellModel[indexPath.section].title.capitalized
         albumName.sizeToFit()
-        albumName.autoCenterInSuperview()
     }
-    
 }

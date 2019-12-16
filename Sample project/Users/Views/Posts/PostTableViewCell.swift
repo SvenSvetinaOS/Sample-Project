@@ -10,6 +10,8 @@ import UIKit
 
 class PostTableViewCell: UITableViewCell {
     
+    static let identifier = String(describing: PostTableViewCell.self)
+    
     @IBOutlet weak var postTitle: UILabel!
     @IBOutlet weak var postBody: UILabel!
     
@@ -17,7 +19,7 @@ class PostTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configureWithModel(_ cellModel: PostModel) {
+    func configure(cellModel: PostModel) {
         postTitle.text = cellModel.title
         postBody.text = cellModel.body
         postTitle.sizeToFit()

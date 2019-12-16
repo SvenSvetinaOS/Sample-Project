@@ -13,7 +13,9 @@ import UIKit
 import PureLayout
 import Kingfisher
 
-class PhotoViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class PhotoViewController: UIViewController {
+    private let cellSize = CGSize(width: 70, height: 70)
+    
     var photoCollectionView: UICollectionView!
 
     var networkService: NetworkService?
@@ -24,22 +26,6 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate, UICollect
         setupLayout()
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 70, height: 70)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoModelForUser.count
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoCell
-        let photoModelForUser = self.photoModelForUser[indexPath.row]
-        let photo = photoModelForUser.url
-        setImage(string: photo, imageView: cell.photoImageView)
-        
-        return cell
-    }
-    
     func setupLayout() {
          let spacing: CGFloat = 5.0
          let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -48,7 +34,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate, UICollect
          layout.minimumInteritemSpacing = spacing
          
          photoCollectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
-         photoCollectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "photoCell")
+        photoCollectionView.register(UINib(nibName: PhotoCell.identifier, bundle: nil), forCellWithReuseIdentifier: PhotoCell.identifier)
          photoCollectionView.delegate = self
          photoCollectionView.dataSource = self
          photoCollectionView.backgroundColor = .white
@@ -68,7 +54,6 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate, UICollect
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
-            placeholder: UIImage(named: "placeholderImage"),
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
@@ -84,5 +69,28 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate, UICollect
                 print("Job failed: \(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension PhotoViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = photoCollectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoCell
+        let photoModelForUser = self.photoModelForUser[indexPath.row]
+        let photo = photoModelForUser.url
+        setImage(string: photo, imageView: cell.photoImageView)
+        
+        return cell
+    }
+}
+
+extension PhotoViewController: UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return photoModelForUser.count
+    }
+}
+
+extension PhotoViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return cellSize
     }
 }

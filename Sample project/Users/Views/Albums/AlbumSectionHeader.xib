@@ -13,15 +13,20 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="p52-fi-yjb">
-                    <rect key="frame" x="2" y="15" width="42" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="p52-fi-yjb">
+                    <rect key="frame" x="8" y="0.0" width="304" height="50"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="p52-fi-yjb" secondAttribute="trailing" constant="8" id="WnP-iO-A9Q"/>
+                <constraint firstItem="p52-fi-yjb" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="Ycu-Sy-im1"/>
+                <constraint firstItem="VXr-Tz-HHm" firstAttribute="bottom" secondItem="p52-fi-yjb" secondAttribute="bottom" id="ZOo-AP-lp2"/>
+                <constraint firstItem="p52-fi-yjb" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" constant="8" id="fEd-Js-jIQ"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
             <connections>
                 <outlet property="albumName" destination="p52-fi-yjb" id="QZN-QD-Kt6"/>

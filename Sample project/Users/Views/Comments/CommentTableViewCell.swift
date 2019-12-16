@@ -9,16 +9,17 @@
 import UIKit
 
 class CommentTableViewCell: UITableViewCell {
+    
+    static let identifier = String(describing: CommentTableViewCell.self)
 
     @IBOutlet weak var commentName: UILabel!
     @IBOutlet weak var commentBody: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     
-    func configureWithModel(_ cellModel: CommentModel) {
+    func configure(cellModel: CommentModel) {
         commentName.text = cellModel.name
         commentBody.text = cellModel.body
         commentName.sizeToFit()

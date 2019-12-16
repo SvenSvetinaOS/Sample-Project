@@ -13,6 +13,8 @@ import Kingfisher
 
 class UserTableViewCell: UITableViewCell {
     
+    static let identifier = String(describing: UserTableViewCell.self)
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var phoneLabel: UILabel!
     @IBOutlet weak var webLabel: UILabel!
@@ -21,7 +23,8 @@ class UserTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-    func configureWithCellModel(_ cellModel: UserModel, photoModel: [PhotoModel]) {
+    
+    func configure(cellModel: UserModel, photoModel: [PhotoModel]) {
         titleLabel.text = cellModel.name
         phoneLabel.text = "Phone: \(cellModel.phone)"
         webLabel.text = "Web: \(cellModel.website)"

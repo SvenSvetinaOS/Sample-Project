@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 class AlbumCell: UICollectionViewCell {
+    
+    static let identifier = String(describing: AlbumCell.self)
         
     @IBOutlet weak var albumImageView: UIImageView!
     @IBOutlet weak var albumName: UILabel!

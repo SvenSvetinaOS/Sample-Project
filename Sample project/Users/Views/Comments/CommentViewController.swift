@@ -9,8 +9,11 @@
 import UIKit
 import Foundation
 
-class CommentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    var userModel = [UserModel]()
+class CommentViewController: UIViewController {
+    private let cellHeight: CGFloat = 120.0
+    let commentsTitle = "Comments"
+    
+    var users = [UserModel]()
     var commentModelForUser = [CommentModel]()
     
     let tableView = UITableView()
@@ -19,37 +22,42 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         super.loadView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UINib(nibName: "CommentTableViewCell", bundle: nil), forCellReuseIdentifier: "commentTableViewCell")
+        tableView.register(UINib(nibName: CommentTableViewCell.identifier, bundle: nil), forCellReuseIdentifier: CommentTableViewCell.identifier)
         tableView.reloadData()
         setupLayout()
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    func setupLayout() {
+        view.addSubview(tableView)
+        navigationItem.title = commentsTitle
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
+    }
+}
+
+extension CommentViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return cellHeight
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return commentModelForUser.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        120.0
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "commentTableViewCell") as! CommentTableViewCell
-        cell.configureWithModel(commentModelForUser[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier) as! CommentTableViewCell
+        cell.configure(cellModel: commentModelForUser[indexPath.row])
         return cell
     }
-    
-    func setupLayout() {
-        view.addSubview(tableView)
-        navigationItem.title = "Comments"
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+}
+
+extension CommentViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

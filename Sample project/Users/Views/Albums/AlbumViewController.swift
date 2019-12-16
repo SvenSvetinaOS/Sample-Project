@@ -11,7 +11,9 @@ import UIKit
 import PureLayout
 import Kingfisher
 
-class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class AlbumViewController: UIViewController {
+    private let sizeForHeaderInSection = CGSize(width: 320, height: 25)
+    
     var albumCollectionView: UICollectionView!
     var sectionHeader = UICollectionReusableView()
     weak var sectionLabel: UILabel!
@@ -24,45 +26,10 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         setupLayout()
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let sectionHeader = albumCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "AlbumSectionHeader", for: indexPath) as! AlbumSectionHeader
-        sectionHeader.configureWithModel(albumModelForUser, indexPath)
-        
-        return sectionHeader
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 320, height: 25)
-    }
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return albumModelForUser.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoModelForUser.count
-    }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = albumCollectionView.dequeueReusableCell(withReuseIdentifier: "albumCell", for: indexPath) as! AlbumCell
-        let photosForUser = albumModelForUser[indexPath.section].photoModel
-        let thumbnailUrl = photosForUser[indexPath.row].thumbnailUrl
-        
-        setImage(string: thumbnailUrl, imageView: cell.albumImageView)
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let photoModel = albumModelForUser[indexPath.section].photoModel
-        
-        let photoViewController = PhotoViewController()
-        photoViewController.photoModelForUser = photoModel
-    }
-    
     func setupLayout() {
         albumCollectionView = UICollectionView(frame: view.frame, collectionViewLayout: createCompositionalLayout())
-        albumCollectionView.register(UINib(nibName: "AlbumSectionHeader", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "AlbumSectionHeader")
-        albumCollectionView.register(UINib(nibName: "AlbumCell", bundle: nil), forCellWithReuseIdentifier: "albumCell")
+        albumCollectionView.register(UINib(nibName: AlbumSectionHeader.identifier, bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AlbumSectionHeader.identifier)
+        albumCollectionView.register(UINib(nibName: AlbumCell.identifier, bundle: nil), forCellWithReuseIdentifier: AlbumCell.identifier)
         albumCollectionView.delegate = self
         albumCollectionView.dataSource = self
         albumCollectionView.backgroundColor = .white
@@ -83,7 +50,6 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
             with: url,
-            placeholder: UIImage(named: "placeholderImage"),
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
@@ -108,7 +74,7 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
     }
     
     func createSection() -> NSCollectionLayoutSection {
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(25)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize (widthDimension: .fractionalWidth(1), heightDimension: .estimated(25)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
         layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 3, bottom: 0, trailing: 3)
@@ -119,5 +85,46 @@ class AlbumViewController: UIViewController, UICollectionViewDelegate, UICollect
         layoutSection.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
         
         return layoutSection
+    }
+}
+
+extension AlbumViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let photoModel = albumModelForUser[indexPath.section].photoModel
+        
+        let photoViewController = PhotoViewController()
+        photoViewController.photoModelForUser = photoModel
+    }
+}
+
+extension AlbumViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+           let sectionHeader = albumCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AlbumSectionHeader.identifier, for: indexPath) as! AlbumSectionHeader
+        sectionHeader.configure(cellModel: albumModelForUser, indexPath: indexPath)
+           
+           return sectionHeader
+       }
+       
+       func numberOfSections(in collectionView: UICollectionView) -> Int {
+           return albumModelForUser.count
+       }
+       
+       func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+           return photoModelForUser.count
+       }
+       func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+           let cell = albumCollectionView.dequeueReusableCell(withReuseIdentifier: AlbumCell.identifier, for: indexPath) as! AlbumCell
+           let photosForUser = albumModelForUser[indexPath.section].photoModel
+           let thumbnailUrl = photosForUser[indexPath.row].thumbnailUrl
+           
+           setImage(string: thumbnailUrl, imageView: cell.albumImageView)
+           
+           return cell
+       }
+}
+
+extension AlbumViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return sizeForHeaderInSection
     }
 }
