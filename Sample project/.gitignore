@@ -1,0 +1,15 @@
+*.DS_Store
+
+*.xcuserstate
+
+*.xcbkptlist
+
+xcuserdata/
+
+Payload/
+
+distribution_files/
+
+build/
+
+*.xcsettings
