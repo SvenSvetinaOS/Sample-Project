@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import Alamofire
 
 public struct Resources<T: Decodable> {
     let path: String
     
     public func fetchResourceData(completion: @escaping ([T]) -> Void) {
-        guard let url = URL(string: path)  else { return }
+        guard let url = URL(string: path) else { return }
         let session = URLSession.shared
         session.dataTask(with: url) { data, response, error in
             if error != nil {
@@ -28,3 +29,4 @@ public struct Resources<T: Decodable> {
         }.resume()
     }
 }
+
