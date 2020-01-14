@@ -18,6 +18,8 @@ class UserViewController: UIViewController {
     let posts = "Posts"
     let delete = "Delete"
     
+    var userPresenter: UserPresenter!
+    
     var networkService = NetworkService()
     var users = [UserModel]()
     var filteredUsers = [UserModel]()
@@ -75,6 +77,7 @@ class UserViewController: UIViewController {
         networkService.fetchData() { [weak self] users in
             self?.users = users
             self?.filteredUsers = users
+            self?.coreUser = self!.networkService.managedUsers
             self?.refreshControl.endRefreshing()
             self?.tableView.reloadData()
         }
@@ -125,12 +128,10 @@ extension UserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.identifier) as! UserTableViewCell
         let user = filteredUsers[indexPath.row]
- 
-        cell.titleLabel.text = coreUser.first?.name
         
-//        cell.configure(
-//            cellModel: user,
-//            photoModel: user.albumModel[indexPath.section].photoModel)
+        cell.configure(
+            cellModel: user,
+            photoModel: user.albumModel[indexPath.section].photoModel)
         
         return cell
     }

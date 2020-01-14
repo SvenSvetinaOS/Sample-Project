@@ -1,14 +1,15 @@
 //
-//  UserUseCaseProtocol.swift
+//  UserRepositoryProtocol.swift
 //  Users
 //
 //  Created by Sven Svetina on 09/01/2020.
 //  Copyright © 2020 Sven Svetina. All rights reserved.
 //
 
-protocol UserUseCaseProtocol {
+import CoreData
+
+protocol UserRepositoryProtocol {
     
-    func query() -> User
-//    func save() -> User
+    var user: User { get }
     
 }

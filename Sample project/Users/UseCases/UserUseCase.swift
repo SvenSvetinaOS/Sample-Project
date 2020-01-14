@@ -7,21 +7,16 @@
 //
 
 import Foundation
-//
-//class UserUseCase<Repository>: UserUseCaseProtocol {
-//    func insert(userModel: UserModel) -> User {
-//        <#code#>
-//    }
-//    
-//
-//    private var userRepository: Repository
-//    
-////    func insert(userModel: UserModel) -> User {
-////        return userRepository.insert(userModel: userModel)
-////    }
-////
-//    init(userRepository: Repository) {
-//        self.userRepository = userRepository
-//    }
-//    
-//}
+
+class UserUseCase: UserUseCaseProtocol {
+    
+    private var userRepository: UserRepositoryProtocol
+    
+    init(userRepository: UserRepositoryProtocol) {
+        self.userRepository = userRepository
+    }
+    
+    func query() -> User {
+        return userRepository.user
+    }
+}

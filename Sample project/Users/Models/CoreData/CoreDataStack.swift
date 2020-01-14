@@ -51,11 +51,6 @@ final class CoreDataStack {
             NSMigratePersistentStoresAutomaticallyOption: true,
             NSInferMappingModelAutomaticallyOption: true
         ]
-
-        #if DEBUG
-        print("DB url: \(storeUrl)")
-        #endif
-
         do {
             try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                                                     configurationName: nil,

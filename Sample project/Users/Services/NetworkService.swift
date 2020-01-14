@@ -60,6 +60,7 @@ class NetworkService {
             let userModels = self.createUsers(users: self.users, albums: self.albums, photos: self.photos, posts: self.posts, comments: self.comments)
             completion(userModels)
         })
+        let test = userStore.query()
     }
     
     func createUsers(users: [UserAPI], albums: [AlbumAPI], photos: [PhotoAPI], posts: [PostAPI], comments: [CommentAPI]) -> [UserModel] {
@@ -98,6 +99,7 @@ class NetworkService {
             userModels.append(userModel)
             self.userModel = userModel
             let uzr = userStore.save(userModel: userModel)
+            managedUsers.append(uzr)
         }
         return userModels
     }

@@ -36,8 +36,8 @@
 		26945A3D23C614E20008E23A /* UserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26945A3C23C614E20008E23A /* UserUseCase.swift */; };
 		26945A4023C726F90008E23A /* UserPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26945A3F23C726F90008E23A /* UserPresenter.swift */; };
 		26945A4223C72D090008E23A /* UserUseCaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26945A4123C72D090008E23A /* UserUseCaseProtocol.swift */; };
-		26945A4523C7506C0008E23A /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26945A4423C7506C0008E23A /* Repository.swift */; };
-		26945A4723C750810008E23A /* RepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26945A4623C750810008E23A /* RepositoryProtocol.swift */; };
+		26945A4523C7506C0008E23A /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26945A4423C7506C0008E23A /* UserRepository.swift */; };
+		26945A4723C750810008E23A /* UserRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26945A4623C750810008E23A /* UserRepositoryProtocol.swift */; };
 		269791D5238FC034005282B2 /* ResourcePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269791D4238FC034005282B2 /* ResourcePaths.swift */; };
 		269791D7239161D1005282B2 /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269791D6239161D1005282B2 /* PostViewController.swift */; };
 		269791D923916202005282B2 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269791D823916202005282B2 /* PostModel.swift */; };
@@ -58,6 +58,7 @@
 		26EE2AAF23798A9800C3A08D /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EE2AAE23798A9800C3A08D /* Resources.swift */; };
 		26F1D017235605F80023BCFF /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D016235605F80023BCFF /* PhotoViewController.swift */; };
 		26F1D021235854920023BCFF /* PhotoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F1D020235854920023BCFF /* PhotoAPI.swift */; };
+		26FD01D423CDEA1200E4FDD0 /* UserStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FD01D323CDEA1200E4FDD0 /* UserStoreProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,8 +92,8 @@
 		26945A3C23C614E20008E23A /* UserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCase.swift; sourceTree = "<group>"; };
 		26945A3F23C726F90008E23A /* UserPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPresenter.swift; sourceTree = "<group>"; };
 		26945A4123C72D090008E23A /* UserUseCaseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUseCaseProtocol.swift; sourceTree = "<group>"; };
-		26945A4423C7506C0008E23A /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
-		26945A4623C750810008E23A /* RepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryProtocol.swift; sourceTree = "<group>"; };
+		26945A4423C7506C0008E23A /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
+		26945A4623C750810008E23A /* UserRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositoryProtocol.swift; sourceTree = "<group>"; };
 		269791D4238FC034005282B2 /* ResourcePaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePaths.swift; sourceTree = "<group>"; };
 		269791D6239161D1005282B2 /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		269791D823916202005282B2 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 		26EE2AAE23798A9800C3A08D /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
 		26F1D016235605F80023BCFF /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		26F1D020235854920023BCFF /* PhotoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAPI.swift; sourceTree = "<group>"; };
+		26FD01D323CDEA1200E4FDD0 /* UserStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStoreProtocol.swift; sourceTree = "<group>"; };
 		4B1A31BD0AE67B9944D10DDC /* Pods-Users.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Users.debug.xcconfig"; path = "Target Support Files/Pods-Users/Pods-Users.debug.xcconfig"; sourceTree = "<group>"; };
 		50E019028CD017C99EAF3330 /* Pods-Users.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Users.release.xcconfig"; path = "Target Support Files/Pods-Users/Pods-Users.release.xcconfig"; sourceTree = "<group>"; };
 		DFC8AC140C1BAD192BA52437 /* Pods_Users.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Users.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -242,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				26945A3523C5DDCD0008E23A /* UserStore.swift */,
+				26FD01D323CDEA1200E4FDD0 /* UserStoreProtocol.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -266,8 +269,8 @@
 		26945A4323C750540008E23A /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				26945A4423C7506C0008E23A /* Repository.swift */,
-				26945A4623C750810008E23A /* RepositoryProtocol.swift */,
+				26945A4423C7506C0008E23A /* UserRepository.swift */,
+				26945A4623C750810008E23A /* UserRepositoryProtocol.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -496,7 +499,7 @@
 				269791E423951CBF005282B2 /* CommentViewController.swift in Sources */,
 				2664D272237AEF28003F867D /* PhotoModel.swift in Sources */,
 				269791D7239161D1005282B2 /* PostViewController.swift in Sources */,
-				26945A4723C750810008E23A /* RepositoryProtocol.swift in Sources */,
+				26945A4723C750810008E23A /* UserRepositoryProtocol.swift in Sources */,
 				2652C72323C4CC5A00A1C12B /* Users.xcdatamodeld in Sources */,
 				26945A2F23C5D9110008E23A /* CoreDataStack.swift in Sources */,
 				26F1D021235854920023BCFF /* PhotoAPI.swift in Sources */,
@@ -507,7 +510,7 @@
 				26201C19234F6AEF0041F0ED /* UserViewController.swift in Sources */,
 				269791DC239164CB005282B2 /* PostTableViewCell.swift in Sources */,
 				264FD83123840E280097F9C0 /* AlbumViewController.swift in Sources */,
-				26945A4523C7506C0008E23A /* Repository.swift in Sources */,
+				26945A4523C7506C0008E23A /* UserRepository.swift in Sources */,
 				26A3B44A23C8852000C92098 /* DomainConvertibleType.swift in Sources */,
 				26BD51902386885200D735F2 /* AlbumSectionHeader.swift in Sources */,
 				269185FC23C5D2F60024386C /* User+CoreDataProperties.swift in Sources */,
@@ -515,6 +518,7 @@
 				26B9969723687CAD00D16E2F /* AlbumAPI.swift in Sources */,
 				263AE4C7233BDF9C0011EED0 /* UserAPI.swift in Sources */,
 				26945A3A23C5E3E00008E23A /* NSManagedObjectFactoryProtocol.swift in Sources */,
+				26FD01D423CDEA1200E4FDD0 /* UserStoreProtocol.swift in Sources */,
 				2664D270237AEF0C003F867D /* UserModel.swift in Sources */,
 				26945A3D23C614E20008E23A /* UserUseCase.swift in Sources */,
 				263AE4C3233BA9100011EED0 /* NetworkService.swift in Sources */,
