@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 class NetworkService {
     var users = [UserAPI]()
@@ -16,6 +17,13 @@ class NetworkService {
     var albums = [AlbumAPI]()
     let dispatchGroup = DispatchGroup()
     var userModel: UserModel!
+    var managedUsers = [User]()
+    
+    var userStore = UserStore()
+//    
+    init() {
+        self.userStore = UserStore()
+    }
     
     func fetchData(completion: @escaping ([UserModel]) -> Void) {
         dispatchGroup.enter()
@@ -88,6 +96,8 @@ class NetworkService {
         for user in users {
             let userModel = UserModel(userAPI: user, albumModel: albumsByUserId[user.id]!, postModel: postsByUserId[user.id]!)
             userModels.append(userModel)
+            self.userModel = userModel
+            let uzr = userStore.save(userModel: userModel)
         }
         return userModels
     }

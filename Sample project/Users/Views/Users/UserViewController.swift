@@ -13,7 +13,7 @@ class UserViewController: UIViewController {
     private let cellHeight: CGFloat = 120.0
     let usersTitle = "Users"
     let loading = "Loading"
-    let search = "Searing Users"
+    let search = "Searching Users"
     let albums = "Albums"
     let posts = "Posts"
     let delete = "Delete"
@@ -23,9 +23,13 @@ class UserViewController: UIViewController {
     var filteredUsers = [UserModel]()
     var refreshControl = UIRefreshControl()
     let searchController = UISearchController(searchResultsController: nil)
+    var coreUser = [User]()
     
     let tableView = UITableView()
     let tableHeader = UITableViewHeaderFooterView()
+    
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
     override func viewDidLoad() {
         super.loadView()
@@ -33,6 +37,15 @@ class UserViewController: UIViewController {
         setupLayout()
         setupSearch()
         fetchData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        do {
+            coreUser = try context.fetch(User.fetchRequest())
+        } catch let error as NSError {
+            print("\(error)")
+        }
     }
     
     func setupTableView() {
@@ -113,9 +126,11 @@ extension UserViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.identifier) as! UserTableViewCell
         let user = filteredUsers[indexPath.row]
  
-        cell.configure(
-            cellModel: user,
-            photoModel: user.albumModel[indexPath.section].photoModel)
+        cell.titleLabel.text = coreUser.first?.name
+        
+//        cell.configure(
+//            cellModel: user,
+//            photoModel: user.albumModel[indexPath.section].photoModel)
         
         return cell
     }

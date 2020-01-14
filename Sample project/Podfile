@@ -9,5 +9,6 @@ target 'Users' do
   pod "PureLayout"
   pod "Kingfisher"
   pod "Alamofire"
+  pod "RxSwift"
 
 end
