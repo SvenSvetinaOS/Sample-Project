@@ -6,9 +6,11 @@
 //  Copyright © 2020 Sven Svetina. All rights reserved.
 //
 
+/**
+Implement this protocol when adding a new user in a feature module
+*/
 protocol UserUseCaseProtocol {
     
-    func query() -> User
-//    func save() -> User
-    
+    // Queries all available users
+    func queryUsers(completion: @escaping ([UserModel]) -> Void)
 }

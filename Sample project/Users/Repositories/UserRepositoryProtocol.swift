@@ -8,8 +8,9 @@
 
 import CoreData
 
+
 protocol UserRepositoryProtocol {
-    
-    var user: User { get }
-    
+
+    //Queries all users from the database. If the database is empty, fetches the user data from the API
+    func getUsers(completion: @escaping ([UserModel]) -> Void)
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PhotoAPI: Codable {
+struct ApiPhoto: Codable {
     let albumId: Int
     let id: Int
     let title: String

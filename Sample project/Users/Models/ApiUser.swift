@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserAPI: Codable {
+struct ApiUser: Codable {
     let id: Int
     let name: String
     let phone: String

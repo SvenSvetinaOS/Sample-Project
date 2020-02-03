@@ -9,49 +9,43 @@
 import Foundation
 import CoreData
 
-class NetworkService {
-    var users = [UserAPI]()
-    var photos = [PhotoAPI]()
-    var posts = [PostAPI]()
-    var comments = [CommentAPI]()
-    var albums = [AlbumAPI]()
+class UserService {
+    var users = [ApiUser]()
+    var photos = [ApiPhoto]()
+    var posts = [ApiPost]()
+    var comments = [ApiComment]()
+    var albums = [ApiAlbum]()
     let dispatchGroup = DispatchGroup()
     var userModel: UserModel!
     var managedUsers = [User]()
     
-    var userStore = UserStore()
-//    
-    init() {
-        self.userStore = UserStore()
-    }
-    
     func fetchData(completion: @escaping ([UserModel]) -> Void) {
         dispatchGroup.enter()
-        let userResource: Resources<UserAPI> = Resources(path: ResourcePaths.users.path())
+        let userResource: Resources<ApiUser> = Resources(path: ResourcePaths.users.path())
         userResource.fetchResourceData { [weak self] user in
             self?.users = user
             self?.dispatchGroup.leave()
         }
         dispatchGroup.enter()
-        let albumResource: Resources<AlbumAPI> = Resources(path: ResourcePaths.albums.path())
+        let albumResource: Resources<ApiAlbum> = Resources(path: ResourcePaths.albums.path())
         albumResource.fetchResourceData { [weak self] album in
             self?.albums = album
             self?.dispatchGroup.leave()
         }
         dispatchGroup.enter()
-        let photoResource: Resources<PhotoAPI> = Resources(path: ResourcePaths.photos.path())
+        let photoResource: Resources<ApiPhoto> = Resources(path: ResourcePaths.photos.path())
         photoResource.fetchResourceData { [weak self] photo in
             self?.photos = photo
             self?.dispatchGroup.leave()
         }
         dispatchGroup.enter()
-        let postResource: Resources<PostAPI> = Resources(path: ResourcePaths.posts.path())
+        let postResource: Resources<ApiPost> = Resources(path: ResourcePaths.posts.path())
         postResource.fetchResourceData { [weak self] post in
             self?.posts = post
             self?.dispatchGroup.leave()
         }
         dispatchGroup.enter()
-        let commentResource: Resources<CommentAPI> = Resources(path: ResourcePaths.comments.path())
+        let commentResource: Resources<ApiComment> = Resources(path: ResourcePaths.comments.path())
         commentResource.fetchResourceData { [weak self] comment in
             self?.comments = comment
             self?.dispatchGroup.leave()
@@ -60,10 +54,9 @@ class NetworkService {
             let userModels = self.createUsers(users: self.users, albums: self.albums, photos: self.photos, posts: self.posts, comments: self.comments)
             completion(userModels)
         })
-        let test = userStore.query()
     }
     
-    func createUsers(users: [UserAPI], albums: [AlbumAPI], photos: [PhotoAPI], posts: [PostAPI], comments: [CommentAPI]) -> [UserModel] {
+    func createUsers(users: [ApiUser], albums: [ApiAlbum], photos: [ApiPhoto], posts: [ApiPost], comments: [ApiComment]) -> [UserModel] {
         var photosByAlbumId = [Int: [PhotoModel]]()
         var albumsByUserId = [Int : [AlbumModel]]()
         var commentsByPostId = [Int: [CommentModel]]()
@@ -98,8 +91,6 @@ class NetworkService {
             let userModel = UserModel(userAPI: user, albumModel: albumsByUserId[user.id]!, postModel: postsByUserId[user.id]!)
             userModels.append(userModel)
             self.userModel = userModel
-            let uzr = userStore.save(userModel: userModel)
-            managedUsers.append(uzr)
         }
         return userModels
     }

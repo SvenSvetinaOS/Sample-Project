@@ -9,13 +9,15 @@
 import Foundation
 
 struct AlbumModel {
+    
     let id: Int
     let title: String
     let photoModel: [PhotoModel]
    
-    init(albumAPI: AlbumAPI, photoModel: [PhotoModel]) {
+    init(albumAPI: ApiAlbum, photoModel: [PhotoModel]) {
         self.id = albumAPI.id
         self.title = albumAPI.title
         self.photoModel = photoModel
     }
+    
 }

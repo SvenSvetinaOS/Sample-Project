@@ -16,7 +16,7 @@ struct UserModel {
     var albumModel: [AlbumModel]
     var postModel: [PostModel]
     
-    init(userAPI: UserAPI, albumModel: [AlbumModel], postModel: [PostModel]) {
+    init(userAPI: ApiUser, albumModel: [AlbumModel], postModel: [PostModel]) {
         self.id = userAPI.id
         self.name = userAPI.name
         self.phone = userAPI.phone
@@ -24,4 +24,14 @@ struct UserModel {
         self.albumModel = albumModel
         self.postModel = postModel
     }
+    
+    init(user: User) {
+        self.id = user.userId
+        self.name = user.name
+        self.phone = user.phone
+        self.website = user.website
+        self.albumModel = []
+        self.postModel = []
+    }
+    
 }

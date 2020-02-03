@@ -8,9 +8,16 @@
 
 import Foundation
 
+/**
+ Saves and fetches users to and from a designated database
+ Implement this protocol when adding a new user in a feature module
+ */
+
 protocol UserStoreProtocol {
     
-    func query(predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?) -> User
-    func save(userModel: UserModel) -> User
-    func fetchUser() -> User
+    // Saves user to database
+    func save(userModel: UserModel)
+    
+    // Fetches user from database
+    func fetchUsers(completion: @escaping ([User]) -> Void)
 }

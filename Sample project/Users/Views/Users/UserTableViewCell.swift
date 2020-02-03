@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import PureLayout
 import Kingfisher
+import Alamofire
 
 class UserTableViewCell: UITableViewCell {
     
@@ -24,15 +25,17 @@ class UserTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configure(cellModel: UserModel, photoModel: [PhotoModel]) {
-        titleLabel.text = cellModel.name
-        phoneLabel.text = "Phone: \(cellModel.phone)"
-        webLabel.text = "Web: \(cellModel.website)"
+    func configure(model: UserModel, indexPath: IndexPath) {
+        
+        titleLabel.text = model.name
+        phoneLabel.text = "Phone: \(model.phone)"
+        webLabel.text = "Web: \(model.website)"
+        let userImageString = model.albumModel[indexPath.section].photoModel.first!.url
+        setImage(string: userImageString, imageView: userPhoto)
+        
         titleLabel.sizeToFit()
         phoneLabel.sizeToFit()
         webLabel.sizeToFit()
-        let userImageString = photoModel.first!.url
-        setImage(string: userImageString, imageView: userPhoto)
     }
     
     func setImage(string: String, imageView: UIImageView) {

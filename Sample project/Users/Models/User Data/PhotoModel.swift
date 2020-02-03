@@ -16,7 +16,7 @@ struct PhotoModel {
     let url: String
     let thumbnailUrl: String
     
-    init(photoAPI: PhotoAPI) {
+    init(photoAPI: ApiPhoto) {
         self.albumId = photoAPI.albumId
         self.id = photoAPI.id
         self.title = photoAPI.title

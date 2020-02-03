@@ -15,7 +15,7 @@ struct CommentModel {
     let email: String
     let body: String
     
-    init(commentAPI: CommentAPI) {
+    init(commentAPI: ApiComment) {
         self.postId = commentAPI.postId
         self.id = commentAPI.id
         self.name = commentAPI.name

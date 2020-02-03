@@ -18,7 +18,7 @@ class PhotoViewController: UIViewController {
     
     var photoCollectionView: UICollectionView!
 
-    var networkService: NetworkService?
+    var networkService: UserService?
     var photoModelForUser = [PhotoModel]()
     
     override func viewDidLoad() {

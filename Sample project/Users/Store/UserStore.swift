@@ -10,54 +10,47 @@ import CoreData
 import UIKit
 
 class UserStore: UserStoreProtocol {
+    var userModels = [UserModel]()
     
     private let coreDataStack: CoreDataStack
+    private let networkService = UserService()
+    private let reachability = Reachability()
     
-    init() {
-        self.coreDataStack = try! CoreDataStack()
+    init(coreDataStack: CoreDataStack) {
+        self.coreDataStack = coreDataStack
     }
     
-    func query(predicate: NSPredicate? = nil, sortDescriptors: [NSSortDescriptor]? = nil) -> User {
-        let context = coreDataStack.context(forType: .read)
-        let request = NSFetchRequest<User>(entityName: "User")
-        var user: User!
-        
-        if let predicate = predicate {
-            request.predicate = predicate
-        }
-        request.sortDescriptors = sortDescriptors
-        
-        do {
-            let result = try context.fetch(request)
-            for data in result as [User] {
-                user = data
-            }
-        } catch {
-            print("failed")
-        }
-        return user
-    }
-    
-    func save(userModel: UserModel) -> User {
+    func save(userModel: UserModel){
         let context = coreDataStack.context(forType: .write)
         
-        let user: User? = NSEntityDescription.insertNewObject(forEntityName: "User", into: context) as? User
-        
         context.perform {
-            user!.setFromModel(model: userModel)
-            
+            User.createManagedUser(context: context, user: userModel)
             do {
                 try context.save()
             } catch (let error) {
                 print("\(error)")
             }
         }
-        return user!
     }
     
-    func fetchUser() -> User {
-        return query()
+    func fetchUsers (completion: @escaping ([User]) -> Void) {
+        let context = coreDataStack.context(forType: .read)
+        let userRequest = NSFetchRequest<User>(entityName: "User")
+        let postRequest = NSFetchRequest<Post>(entityName: "Post")
+        let commentRequest = NSFetchRequest<Comment>(entityName: "Comment")
+        let albumRequest = NSFetchRequest<Album>(entityName: "Album")
+        let photoRequest = NSFetchRequest<Photo>(entityName: "Photo")
+        
+        do {
+            let users = try context.fetch(userRequest)
+            let posts = try context.fetch(postRequest)
+            let comments = try context.fetch(commentRequest)
+            let albums = try context.fetch(albumRequest)
+            let photos = try context.fetch(photoRequest)
+            
+            completion(users)
+        } catch {
+            print("fetching users has failed")
+        }
     }
 }
-
-

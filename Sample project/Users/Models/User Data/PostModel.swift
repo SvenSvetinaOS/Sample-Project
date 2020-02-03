@@ -15,7 +15,7 @@ struct PostModel {
     let body: String
     let commentModel: [CommentModel]
     
-    init(postAPI: PostAPI, commentModel: [CommentModel]) {
+    init(postAPI: ApiPost, commentModel: [CommentModel]) {
         self.userId = postAPI.userId
         self.id = postAPI.id
         self.title = postAPI.title

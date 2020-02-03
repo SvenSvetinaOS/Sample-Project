@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CommentAPI: Codable {
+struct ApiComment: Codable {
     let postId: Int
     let id: Int
     let name: String

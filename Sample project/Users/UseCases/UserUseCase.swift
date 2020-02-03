@@ -10,13 +10,14 @@ import Foundation
 
 class UserUseCase: UserUseCaseProtocol {
     
-    private var userRepository: UserRepositoryProtocol
+    private var userRepository: UserRepositoryProtocol!
     
     init(userRepository: UserRepositoryProtocol) {
         self.userRepository = userRepository
     }
     
-    func query() -> User {
-        return userRepository.user
+    func queryUsers(completion: @escaping ([UserModel]) -> Void) {
+        userRepository.getUsers(completion: completion)
     }
 }
+

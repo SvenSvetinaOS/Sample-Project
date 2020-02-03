@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 
 class UserViewController: UIViewController {
+    
     private let cellHeight: CGFloat = 120.0
     let usersTitle = "Users"
     let loading = "Loading"
@@ -19,83 +20,78 @@ class UserViewController: UIViewController {
     let delete = "Delete"
     
     var userPresenter: UserPresenter!
+    var userStore: UserStore!
+    var reachability = Reachability()
     
-    var networkService = NetworkService()
+    var networkService = UserService()
     var users = [UserModel]()
     var filteredUsers = [UserModel]()
     var refreshControl = UIRefreshControl()
     let searchController = UISearchController(searchResultsController: nil)
-    var coreUser = [User]()
+    var managedUser = [User]()
     
     let tableView = UITableView()
     let tableHeader = UITableViewHeaderFooterView()
     
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
+    convenience init(userPresenter: UserPresenter) {
+        self.init()
+        self.userPresenter = userPresenter
+    }
+    
     override func viewDidLoad() {
         super.loadView()
         setupTableView()
         setupLayout()
         setupSearch()
         fetchData()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        do {
-            coreUser = try context.fetch(User.fetchRequest())
-        } catch let error as NSError {
-            print("\(error)")
-        }
-    }
-    
-    func setupTableView() {
-        tableView.separatorStyle = .none
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UINib(nibName: UserTableViewCell.identifier, bundle: nil), forCellReuseIdentifier: UserTableViewCell.identifier)
-    }
-    
-    func setupLayout() {
-        view.addSubview(tableView)
-        navigationItem.title = usersTitle
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-
-        tableView.keyboardDismissMode = .onDrag
-        
-        refreshControl.attributedTitle = NSAttributedString(string: loading)
-        refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
-        tableView.refreshControl = refreshControl
-    }
-    
-    func fetchData() {
-        networkService.fetchData() { [weak self] users in
-            self?.users = users
-            self?.filteredUsers = users
-            self?.coreUser = self!.networkService.managedUsers
-            self?.refreshControl.endRefreshing()
-            self?.tableView.reloadData()
-        }
-    }
-    
-    func filterContent(searchText: String?) {
-        if let searchText = searchText, !searchText.isEmpty {
-            filteredUsers = users.filter { user in
-                return user.name.lowercased().contains(searchText.lowercased())
-            }
-        } else {
-            filteredUsers = users
-        }
         tableView.reloadData()
     }
     
-    @objc func refreshTableView() {
-        fetchData()
+    func fetchData() {
+        userPresenter.users(completion: { [weak self] users in
+            self?.users = users
+            self?.filteredUsers = users
+            self?.refreshControl.endRefreshing()
+            self?.tableView.reloadData()
+    })
+}
+
+func setupTableView() {
+    tableView.separatorStyle = .none
+    tableView.dataSource = self
+    tableView.delegate = self
+    tableView.register(UINib(nibName: UserTableViewCell.identifier, bundle: nil), forCellReuseIdentifier: UserTableViewCell.identifier)
+}
+
+func setupLayout() {
+    view.addSubview(tableView)
+    navigationItem.title = usersTitle
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+    tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+    
+    tableView.keyboardDismissMode = .onDrag
+    
+    refreshControl.attributedTitle = NSAttributedString(string: loading)
+    refreshControl.addTarget(self, action: #selector(refreshTableView), for: UIControl.Event.valueChanged)
+    tableView.refreshControl = refreshControl
+}
+
+func filterContent(searchText: String?) {
+    if let searchText = searchText, !searchText.isEmpty {
+        filteredUsers = users.filter { user in
+            return user.name.lowercased().contains(searchText.lowercased())
+        }
+    } else {
+        filteredUsers = users
+    }
+    tableView.reloadData()
+}
+
+@objc func refreshTableView() {
+    fetchData()
     }
 }
 
@@ -118,23 +114,24 @@ extension UserViewController: UISearchResultsUpdating {
         let searchBar = searchController.searchBar
         filterContent(searchText: searchBar.text)
     }
+    
 }
 // MARK: UITableViewDataSource
 extension UserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredUsers.count
+            return filteredUsers.count
+      
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.identifier) as! UserTableViewCell
         let user = filteredUsers[indexPath.row]
         
-        cell.configure(
-            cellModel: user,
-            photoModel: user.albumModel[indexPath.section].photoModel)
+        cell.configure(model: user, indexPath: indexPath)
         
         return cell
     }
+    
 }
 // MARK: UITableViewDelegate
 extension UserViewController: UITableViewDelegate {
@@ -196,4 +193,5 @@ extension UserViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
 }
